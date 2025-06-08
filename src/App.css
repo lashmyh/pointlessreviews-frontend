@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barriecito&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-med-purple: #8f82b4; 
+  --color-light-purple: #f3f2ff;
+  --color-dark-purple: #292434;
+  --color-bg: #201b21;
+  --color-accent: #e6f069;
+  --font-title: "Barriecito";
+}
+
+body {
+  background-color: #201b21;
+  color: rgb(251, 240, 240);
+  
+
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0;
+  text-align: center;
+  font-family: "Montserrat", Arial, Helvetica, sans-serif
+}
+
+
