@@ -10,7 +10,7 @@ export const StarRating = ({ rating, setRating }) => {
           alt="star"
           onClick={() => setRating(value)}
           className={`w-6 h-6 cursor-pointer invert transition-transform ${
-            value <= rating ? "opacity-100" : "opacity-20"
+            value <= rating ? "opacity-100" : "opacity-10"
           } hover:scale-110 `}
         />
       ))}
