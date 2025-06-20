@@ -28,6 +28,7 @@ export const loginUser = async (credentials) => {
 
 export const fetchAllPosts = async (page = 1, pageSize = 20, token = null) => {
     try {
+        console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
         const headers = token
             ? { Authorization: `Bearer ${token}` }
             : {};
