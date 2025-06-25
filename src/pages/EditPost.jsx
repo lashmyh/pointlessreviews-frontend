@@ -41,7 +41,7 @@ export const EditPost = ({ isOpen, onClose, post }) => {
             setDescription("");
             setImage(null);
             onClose(); //close modal
-            navigate("/profile/" + post.userId);
+            navigate("/profile");
 
 
         } catch (error){
