@@ -5,6 +5,7 @@ import { isTokenExpired } from "../utils/tokenCheck";
 import { formatDate } from "../utils/formatDate";
 import { useNavigate } from "react-router-dom";
 
+import { Spinner } from "../components/Spinner";
 import { Navbar } from "../components/Navbar";
 
 import tomato from "../assets/tomato.svg"
@@ -17,6 +18,7 @@ export const Profile = () => {
     const { userId } = useParams(); // get userId from URL
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true)
 
     const token = localStorage.getItem("token");
     const tokenIsValid = !isTokenExpired(token);
@@ -26,6 +28,7 @@ export const Profile = () => {
     useEffect(() => {
         const getProfile = async () => {
             if (tokenIsValid) {
+                setLoading(true);
                 try {
                     const response = userId
                     ? await fetchProfile(token, userId) // fetch another users profile
@@ -35,6 +38,8 @@ export const Profile = () => {
                     setPosts(response.data.reviews)
                 } catch (error) {
                     console.log(error);
+                } finally {
+                    setLoading(false);
                 }
             } else {
                 console.log("error: no token provided")
@@ -49,7 +54,7 @@ export const Profile = () => {
         navigate(`/review/${postId}`);
     }
 
-    if (!profile) return <div>Loading...</div>;
+    if (loading) return <Spinner />;
 
     return (
     <div className="w-[100vw] flex flex-col justify-center">

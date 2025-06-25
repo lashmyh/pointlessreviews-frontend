@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Pagination } from "./Pagination";
 import { formatDate } from "../utils/formatDate";
 import { isTokenExpired } from "../utils/tokenCheck";
+import { Spinner } from "./Spinner";
 
 import tomato from "../assets/tomato.svg"
 import neutral from "../assets/neutral.svg"
@@ -15,6 +16,7 @@ import star from "../assets/star.svg"
 export const Posts = () => {
 
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -23,16 +25,20 @@ export const Posts = () => {
 
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [error, setError] = useState(null);
 
     //fetch all posts
     useEffect(() => {
         const getPosts = async () => {
+            setLoading(true);
             try {
                 const response = await fetchAllPosts(page);
                 setPosts(response.data.items)
                 setTotalPages(response.data.pagination.totalPages)
             } catch (error) {
                 console.log(error)
+            } finally {
+                setLoading(false);
             }
         };
         getPosts();
@@ -44,10 +50,11 @@ export const Posts = () => {
                 await addReaction({reactionType, reviewId}, token)
 
                 // Re-fetch posts
-                const response = await fetchAllPosts();
+                const response = await fetchAllPosts(page);
                 setPosts(response.data.items);
     
             } catch (error){
+                setError(error);
                 console.log(error);
             }
         } else {
@@ -63,12 +70,19 @@ export const Posts = () => {
             navigate(`/login`);
         }
     };
-    
 
+    if (loading) return <Spinner />;
+    
+    if (posts.length === 0) {
+        return <div className="text-center text-lg text-gray-600 mt-10">No posts found.</div>;
+    }
+
+    if (error) {
+        return <div className="text-center text-lg text-gray-600 mt-10">There was an error fetching posts.</div>;
+    }
 
     return (
         <ul className="w-full md:w-200 my-5 bg-lightest flex flex-col gap-5 px-3 max-w-200 self-center">
-            
             {posts.map((post) => (
                 <li key={post.id} className="flex flex-col bg-light-purple text-dark-purple rounded-2xl px-4 py-4 shadow-[5px_5px_0px_0px_rgba(117,99,160,0.8)] gap-1">
                     <div className="flex justify-between w-[100%]">
@@ -105,9 +119,8 @@ export const Posts = () => {
                 </li>
                 
             ))}
-            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
-
+        <Pagination page={page} totalPages={totalPages} setPage={setPage} />
         </ul>
-
     )
+
 }
